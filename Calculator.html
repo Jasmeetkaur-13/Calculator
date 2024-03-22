@@ -1,0 +1,203 @@
+<div id="calculator">
+
+  <input type="text" disabled id="output"/>
+<div id="keypad">
+<button class="clear">C</button>  
+<button class="number">1</button>
+<button class="number">2</button>
+<button class="number">3</button>
+<button>/</button>
+  
+<button class="number">4</button>
+<button class="number">5</button> 
+<button class="number">6</button>
+<button>*</button>
+
+<button class="number">7</button>
+<button class="number">8</button>
+<button class="number">9</button>
+<button>-</button>
+
+<button class="number">0</button> <button class="number">.</button>
+<button>=</button>
+<button>+</button>
+</div>  
+</div>
+
+<style type = "text/css">
+    body {
+    height: 100%;
+  text-align: center;
+  display: -webkit-box;
+  display: flex;
+  align-content: center;
+  margin-top: 24px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+          flex-flow: column wrap;
+  background: #fffefe;
+}
+#calculator {
+  padding: 12px 10px 6px;
+    border-radius: 2px;
+    box-shadow: 0px -6px 10px rgb(23, 12, 12), 0px 4px 15px rgba(0, 0, 0, 0.15);
+    width: 350px;
+}
+#calculator #output {
+      height: 60px;
+    font: bold 30px/44px monospace;
+    margin-bottom: 28px;
+    text-align: right;
+    border-radius: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-right: 8px;
+    box-shadow: inset 2px 2px 5px #000000, inset -5px -5px 10px #000000;
+    width: 100%;
+    box-sizing: border-box;
+    transition: all 0.2s ease-in-out;
+    appearance: none;
+    -webkit-appearance: none;
+}
+#calculator #keypad {
+ width: 350px;
+    height: 410px;
+    display: grid;
+    grid-template-columns: repeat(4, 80px);
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+}
+#calculator #keypad button {
+  position: relative;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: #ffb6b6;
+    transition: all 100ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0px -6px 10px rgb(19, 17, 17), 0px 4px 15px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+}
+#calculator #keypad button:active {
+  box-shadow: 0 15px 20px rgba(0, 0, 0, 0.02);
+}
+#calculator #keypad button.clear {
+  grid-column: 1 / span 4;
+  grid-row: 1 / span 1;
+  background: #ec6868;
+}
+button:focus {
+    border: none;
+    outline: 0 !important;
+    outline-style: none;
+}
+button, #output {
+    border: 0;
+    outline: 0;
+    font-size: 16px;
+    border-radius: 320px;
+    padding: 16px;
+    background-color: #b5b5b5;
+    text-shadow: 1px 1px 0 #FFF;
+}
+button:active:after {
+    box-shadow: inset 0px -2px 5px white, inset 0px 2px 5px rgba(0, 0, 0, 0.15);
+}
+button:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    z-index: 2;
+}
+</style>
+
+
+
+<script type="text/javascript">
+(function myCalculator() {
+
+const keys = document.getElementsByTagName("button");
+
+for (const key of keys) {
+  key.onclick = handleClick;
+}
+const output = document.getElementById("output");
+let numOut = "",
+  numOutNew = "",
+  op = "", 
+  int = 0; 
+
+
+  function handleClick() {
+  let num = this.innerText; 
+   
+  if (this.classList.contains("number")) {
+    numOut += num;
+    output.value = numOut; 
+  } else {
+   
+    doCalc(num);
+  }
+}
+
+function doClear() {
+  output.value = "";
+  numOut = "";
+  numOutNew = "";
+  op = "";
+  int = 0;
+}
+
+
+function doCalc(calc) {
+  
+  if (calc === "C") {
+    doClear();
+  } 
+
+  else if (numOutNew !== "") {
+    numOut = parseFloat(numOut); 
+    switch (op) {
+      case "/":
+        if (numOut !== 0) {
+          int = numOutNew / numOut;
+        } else {
+          int = "error";
+        }
+        break;
+      case "*":
+        int = numOutNew * numOut;
+        break;
+      case "-":
+        int = numOutNew - numOut;
+        break;
+      case "+":
+        int = numOutNew + numOut;
+        break;
+      case "=":
+        int = parseFloat(output.value);
+        break;
+    }
+    if (isNaN(int)) { 
+      output.value = "error";
+          setTimeout(function() {
+            doClear();
+          }, 2000);
+    } else {
+      output.value = int; 
+      numOutNew = int; 
+    }
+  } else if (numOut !== "") {
+
+    numOutNew = parseFloat(numOut); 
+  }
+  op = calc; 
+  numOut = ""; 
+}
+
+})();
+
+</script>
